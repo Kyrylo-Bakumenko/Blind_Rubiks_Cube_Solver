@@ -23,6 +23,7 @@ public class RotationSphere {
         Point p = PointConverter.convertPoint(center);
         int disY = e.getX() - p.x;
         int disZ = e.getY() - p.y;
+        System.out.println((disY*disY + disZ*disZ) + ", " + (getRadius()*getRadius()));
         // compare to radius
         return ( (disY*disY + disZ*disZ) < getRadius()*getRadius());
     }
@@ -53,7 +54,7 @@ public class RotationSphere {
     public void render(Graphics g){
         Point p = PointConverter.convertPoint(this.center);
         g.setColor(Color.WHITE);
-        g.drawArc(p.x -getRadius()/2, p.y -getRadius()/2, getRadius(), getRadius(), 0, 360);
+        g.drawArc(p.x -getRadius(), p.y -getRadius(), getRadius()*2, getRadius()*2, 0, 360);
     }
 
     public int getRadius(){

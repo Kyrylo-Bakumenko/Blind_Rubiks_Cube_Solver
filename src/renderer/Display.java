@@ -1,17 +1,12 @@
 package renderer;
 
-import renderer.buttons.ColorButtonArray;
-import renderer.point.MyPoint;
-import renderer.point.PointConverter;
-import renderer.shapes.Cube;
-import renderer.shapes.MyPolygon;
+import renderer.buttons.ButtonArray;
+import renderer.buttons.OrbitButton;
 import renderer.shapes.RubiksCube;
-import renderer.shapes.Tetrahedron;
 import renderer.tools.RotationSphere;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
@@ -29,7 +24,7 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
     public static int edgePad = (int) (Math.min(WIDTH, HEIGHT)*0.02);
     public static final Color background = new Color(30, 30, 30); // screen background color
     public static final Color text = new Color(170, 170, 170); // screen background color
-    private ColorButtonArray CBA;
+    private ButtonArray BA;
     private RubiksCube RCube;
     private RotationSphere sphere;
     private Color currentColor;
@@ -106,12 +101,12 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
          stop();
     }
 
-    private void init(){
+    private void init() {
         int size = 600;
-        this.CBA = new ColorButtonArray(Display.edgePad, Display.edgePad, 100);
+        this.BA = new ButtonArray(Display.edgePad, Display.edgePad, 100, new File("imgs/orbit.png"));
         this.RCube = new RubiksCube(size, 0, 0, 0);
-        this.RCube.rotate(false, 0, 15, 0);
-        this.sphere = new RotationSphere( size*2 );
+        this.RCube.rotate(false, 45, 45, 0);
+        this.sphere = new RotationSphere( size );
     }
 
     private void render(){
@@ -128,28 +123,64 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
 //        tetra.render(g);
         sphere.render(g);
         RCube.render(g);
-        CBA.paint(g);
+        BA.render(g);
 
         g.dispose();
         bs.show();
     }
     private void update(){
 //        this.tetra.rotate(true, 30.0/(frameRate), 30.0/(frameRate), 0);
-        this.RCube.rotate(true, 20.0/frameRate, 20.0/frameRate, 0);
+//        this.RCube.rotate(true, 20.0/frameRate, 20.0/frameRate, 0);
+    }
+
+    Point old = null;
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        double rotationFactor = 20;// magnifies rotation
+        if(sphere.contains(e) && BA.orbiting()) {
+            Point current = new Point(e.getX() - Display.WIDTH / 2, e.getY() - Display.HEIGHT / 2);
+            if (old != null) {
+                double[] rot = sphere.getRotation(old, current);
+//            if(rot[0] < 0 || rot[1] < 0){
+//                System.out.println("NEGATIVE ANGLE");
+//                System.out.println(rot[0] +", "+ rot[1]);
+//            }
+                RCube.rotate(rot[0] > 0, 0, Math.abs(rot[0])*rotationFactor, 0);
+                RCube.rotate(rot[1] > 0, 0, 0, Math.abs(rot[1])*rotationFactor);
+            }
+            old = current;
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         if(sphere.contains(e)) System.out.println("INSIDE SPHERE");
-        Color selectedColor = CBA.contains(e);
-        if(selectedColor!=null){
-            System.out.println("Color Selected");
-             currentColor = selectedColor;
-        }else if(currentColor!=null){
-            RCube.click(currentColor, e);
+        if(old==null) {
+            Color selectedColor = BA.contains(e);
+            if (selectedColor != null) {
+                System.out.println("Color Selected");
+                currentColor = selectedColor;
+            } else if (currentColor != null && !BA.orbiting()) {
+                RCube.click(currentColor, e);
+            }
         }
-//        this.repaint();
-        System.out.println(e.getX() + ", " + e.getY());
+
+        old = null; // resets frag from rotation drag action
+//        System.out.println(e.getX() + ", " + e.getY());
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        String message;
+        int notches = e.getWheelRotation();
+        RCube.changeScale(notches < 0);
+
+//        if (notches < 0)
+//            message = "Mouse wheel moved UP " + -notches + " notch(es)\n";
+//        else
+//            message = "Mouse wheel moved DOWN " + notches + " notch(es)\n";
+
+//        System.out.println(message);
     }
 
     @Override
@@ -159,7 +190,16 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        if(sphere.contains(e)) System.out.println("INSIDE SPHERE");
+        if(old==null) {
+            Color selectedColor = BA.contains(e);
+            if (selectedColor != null) {
+                System.out.println("Color Selected");
+                currentColor = selectedColor;
+            } else if (currentColor != null && !BA.orbiting()) {
+                RCube.click(currentColor, e);
+            }
+        }
     }
 
     @Override
@@ -172,40 +212,8 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
 
     }
 
-    Point old = null;
-    @Override
-    public void mouseDragged(MouseEvent e) {
-//        if(sphere.contains(e)) {
-//            Point current = new Point(e.getX() - Display.WIDTH / 2, e.getY() - Display.HEIGHT / 2);
-//            if (old != null) {
-//                double[] rot = sphere.getRotation(old, current);
-////            if(rot[0] < 0 || rot[1] < 0){
-////                System.out.println("NEGATIVE ANGLE");
-////                System.out.println(rot[0] +", "+ rot[1]);
-////            }
-//                RCube.rotate(rot[0] > 0, Math.abs(rot[0]), 0, 0);
-//                RCube.rotate(rot[1] > 0, 0, 0, Math.abs(rot[1]));
-//            }
-//            old = current;
-//        }
-    }
-
     @Override
     public void mouseMoved(MouseEvent e) {
 
-    }
-
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-        String message;
-        int notches = e.getWheelRotation();
-        PointConverter.changeScale(notches < 0);
-
-//        if (notches < 0)
-//            message = "Mouse wheel moved UP " + -notches + " notch(es)\n";
-//        else
-//            message = "Mouse wheel moved DOWN " + notches + " notch(es)\n";
-
-//        System.out.println(message);
     }
 }

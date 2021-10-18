@@ -21,7 +21,8 @@ public class ColorButton extends Button{
         border = (int)(0.05*Math.min(width, height));
     }
 
-    public void paint(Graphics g){
+
+    public void render(Graphics g){
         Color prevColor = g.getColor();
         if(selected){
             g.setColor(Color.WHITE);

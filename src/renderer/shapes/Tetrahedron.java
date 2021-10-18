@@ -28,9 +28,15 @@ public class Tetrahedron {
 //        }
     }
 
-    public void render(Graphics g, HashSet<String> blacklist){
+    public void render(Graphics g, HashSet<String> blacklisted){
         for(MyPolygon poly : this.polygons){
-            if(!blacklist.contains(poly.getLoc())) poly.render(g);
+            if(!blacklisted.contains(poly.getLoc())) poly.render(g);
+        }
+    }
+
+    public void updateEdges(){
+        for(MyPolygon poly : this.polygons){
+            poly.updateLines();
         }
     }
 
@@ -78,6 +84,16 @@ public class Tetrahedron {
         }
         return null;
     }
+
+//    public MyPolygon findAllVisiblePolygons(){
+//        for(MyPolygon poly : this.polygons){
+//            poly.resetLineColor();
+//        }
+//        for(int i=this.polygons.length-1; i >= this.polygons.length-3; i--){
+//            if(this.polygons[i].contains(this.polygons[i].getLoc())) return this.polygons[i];
+//        }
+//        return null;
+//    }
 
     public void addPolys(HashMap<String, Integer> map){
         for(MyPolygon poly : this.polygons){

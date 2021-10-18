@@ -72,6 +72,8 @@ public class MyPolygon {
 //            g.drawArc(p2.x-10, p2.y-10, 20, 20, 0, 360);
 //        }
 
+        updateLines();
+
         for(Line line :this.lines) {
             g.setColor(line.color);
             int thickness = Math.max((int) (8 * PointConverter.getScale()), 2);
@@ -88,7 +90,9 @@ public class MyPolygon {
             PointConverter.rotateAxisY(p, CW, yDegrees);
             PointConverter.rotateAxisZ(p, CW, zDegrees);
         }
+    }
 
+    public void updateLines(){
         this.lines = new Line[points.length];
         for(int i = 0; i < points.length-1; i++) {
             Point p1 = PointConverter.convertPoint(this.points[i]);
@@ -108,11 +112,21 @@ public class MyPolygon {
         return intersections % 2 == 1;
     }
 
+//    public boolean contains(String loc){
+//        int testx = Integer.parseInt(loc.substring(loc.indexOf("X")+1, loc.indexOf("Y")));
+//        int testy = Integer.parseInt(loc.substring(loc.indexOf("Y")+1, loc.indexOf("Z")));
+//        int intersections = 0;
+//        for(Line line : this.lines)
+//            if(line.intersects(testx, testy)) intersections++;
+//        System.out.println("Lines: " + lines.length + ", intersected: " + intersections);
+//        return intersections % 2 == 1;
+//    }
+
     public int height(){
-        int pointHeightSum = 0;
+        int pointHeightAvg = 0;
         for(MyPoint p: this.points)
-            pointHeightSum += (int) p.x;
-        return pointHeightSum;
+            pointHeightAvg += (int) p.x;
+        return pointHeightAvg/this.points.length;
     }
 
     private String setLoc(MyPoint... ps){

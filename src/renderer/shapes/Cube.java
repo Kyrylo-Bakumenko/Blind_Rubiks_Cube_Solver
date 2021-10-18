@@ -43,8 +43,12 @@ public class Cube{
         this.tetra.render(g);
     }
 
-    public void render(Graphics g, HashSet<String> blacklist){
-        this.tetra.render(g, blacklist);
+    public void render(Graphics g, HashSet<String> blacklisted){
+        this.tetra.render(g, blacklisted);
+    }
+
+    public void updateEdges(){
+        this.tetra.updateEdges();
     }
 
     public int height(){
@@ -54,6 +58,12 @@ public class Cube{
     public void rotate(boolean CW, double xDegrees, double yDegrees, double zDegrees) {
         this.tetra.rotate(CW, xDegrees, yDegrees, zDegrees);
     }
+
+//    public String findVisibleFaces(){
+//        for(MyPolygon poly : this.tetra){
+//
+//        }
+//    }
 
     public void addFaces(HashMap<String, Integer> map){
         this.tetra.addPolys(map);

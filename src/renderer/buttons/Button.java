@@ -19,7 +19,7 @@ public class Button {
         this.height = height;
     }
 
-    public void paint(Graphics g){
+    public void render(Graphics g){
         g.fillRect(x, y, width, height);
     }
 

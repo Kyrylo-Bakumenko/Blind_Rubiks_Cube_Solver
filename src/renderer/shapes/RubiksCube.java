@@ -1,5 +1,8 @@
 package renderer.shapes;
 
+import renderer.Display;
+import renderer.point.PointConverter;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.*;
@@ -8,6 +11,7 @@ public class RubiksCube {
 
     Cube[] RCube;
     HashSet<String> blacklisted;
+//    HashSet<String> visible;
 
     public RubiksCube(int size, int x, int y, int z){
         RCube = new Cube[27];
@@ -20,6 +24,7 @@ public class RubiksCube {
         }
 
         createBlacklist();
+//        visible = findVisible();
     }
 
     public void click(Color color, MouseEvent e){
@@ -34,22 +39,21 @@ public class RubiksCube {
             this.RCube[i].rotate(CW, xDegrees, yDegrees, zDegrees);
         }
         sortCubes();
+        createBlacklist();
+//        visible = findVisible();
     }
 
     // sort cublets to appear in correct depth order
     public void render(Graphics g){
-        createBlacklist();
-
-//        System.out.println("Size: " + blacklisted.size());
-//        for(Location loc : blacklisted)
-//            System.out.println(loc.toString());
-
         for (Cube cube : this.RCube)
             cube.render(g, blacklisted);
+    }
 
-//        for(int i=this.RCube.length-1; i>=0; i--){
-//            this.RCube[i].render(g);
-//        }
+    public void changeScale(boolean increment){
+        PointConverter.changeScale(increment);
+        for(Cube cube : RCube){
+            cube.updateEdges();
+        }
     }
 
     public void createBlacklist(){
@@ -62,6 +66,22 @@ public class RubiksCube {
             if(map.get(loc) != 1) blacklisted.add(loc);
         }
     }
+
+//    // step will also define minimum size of surface to be visible
+//    public HashSet<String> findVisible(){
+//        // safe search, if there is but a single pixel visible, render it.
+//        HashSet<String> visible = new HashSet<>();
+//        for(int x = 0; x<Display.WIDTH; x+=step){
+//            for(int y =0; y<Display.HEIGHT; y+=step){
+//                for(Cube cube : RCube){
+//                    String loc = cube.findFaceLocation(x, y);
+//                    visible.add(loc);
+//                }
+//            }
+//        }
+//
+//        return visible;
+//    }
     
     public void sortCubes(){
         int[][] order = new int[this.RCube.length][2];
