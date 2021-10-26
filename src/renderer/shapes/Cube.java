@@ -33,7 +33,8 @@ public class Cube{
         MyPolygon targetFace = tetra.findPoly(e.getX(), e.getY());
         if(targetFace != null){
             targetFace.setColor(color);
-            System.out.println("Color changed!");
+            System.out.println("ID:\t"+targetFace.getId());
+//            System.out.println("Color changed!");
             return true;
         }
         return false;
@@ -57,6 +58,10 @@ public class Cube{
 
     public void rotate(boolean CW, double xDegrees, double yDegrees, double zDegrees) {
         this.tetra.rotate(CW, xDegrees, yDegrees, zDegrees);
+    }
+
+    public int assignIds(int id){
+        return tetra.assignIds(id);
     }
 
 //    public String findVisibleFaces(){

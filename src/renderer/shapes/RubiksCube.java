@@ -10,6 +10,9 @@ import java.util.*;
 public class RubiksCube {
 
     Cube[] RCube;
+    Tetrahedron[] Corners;
+    Tetrahedron[] Edges;
+
     HashSet<String> blacklisted;
 //    HashSet<String> visible;
 
@@ -24,6 +27,7 @@ public class RubiksCube {
         }
 
         createBlacklist();
+        assignIds();
 //        visible = findVisible();
     }
 
@@ -64,6 +68,13 @@ public class RubiksCube {
         }
         for(String loc : map.keySet()){
             if(map.get(loc) != 1) blacklisted.add(loc);
+        }
+    }
+
+    public void assignIds(){
+        int id = 0;
+        for(Cube cube : RCube){
+            id = cube.assignIds(id);
         }
     }
 

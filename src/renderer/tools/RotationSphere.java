@@ -23,7 +23,7 @@ public class RotationSphere {
         Point p = PointConverter.convertPoint(center);
         int disY = e.getX() - p.x;
         int disZ = e.getY() - p.y;
-        System.out.println((disY*disY + disZ*disZ) + ", " + (getRadius()*getRadius()));
+//        System.out.println((disY*disY + disZ*disZ) + ", " + (getRadius()*getRadius()));
         // compare to radius
         return ( (disY*disY + disZ*disZ) < getRadius()*getRadius());
     }

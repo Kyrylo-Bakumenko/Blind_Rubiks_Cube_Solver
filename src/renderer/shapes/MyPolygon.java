@@ -11,7 +11,8 @@ public class MyPolygon {
     private final MyPoint[] points;
     private Line[] lines;
     private String loc; // x,y,z coordinates to identify overlaps
-    private int nvert;
+    private int id;
+//    private int nvert;
 
     public MyPolygon(Color color, MyPoint... points){
         this.color = color;
@@ -19,7 +20,7 @@ public class MyPolygon {
         for(int i = 0; i < points.length; i++){
             MyPoint p = points[i];
             this.points[i] = new MyPoint(p.x, p.y, p.z);
-            nvert = points.length;
+//            nvert = points.length;
         }
 
         this.lines = new Line[points.length];
@@ -41,7 +42,7 @@ public class MyPolygon {
         for(int i = 0; i < points.length; i++){
             MyPoint p = points[i];
             this.points[i] = new MyPoint(p.x, p.y, p.z);
-            nvert = points.length;
+//            nvert = points.length;
         }
 
         this.lines = new Line[points.length];
@@ -108,7 +109,7 @@ public class MyPolygon {
         int intersections = 0;
         for(Line line : this.lines)
             if(line.intersects(testx, testy)) intersections++;
-        System.out.println("Lines: " + lines.length + ", intersected: " + intersections);
+//        System.out.println("Lines: " + lines.length + ", intersected: " + intersections);
         return intersections % 2 == 1;
     }
 
@@ -139,6 +140,14 @@ public class MyPolygon {
             z+=p.z;
         }
         return "X" + x + "Y" + y + "Z" + z;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public void setId(int newId){
+        this.id = newId;
     }
 
     public String getLoc(){

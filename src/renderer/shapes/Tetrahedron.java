@@ -85,6 +85,13 @@ public class Tetrahedron {
         return null;
     }
 
+    public int assignIds(int id){
+        for(MyPolygon poly : polygons){
+            poly.setId(id++);
+        }
+        return id;
+    }
+
 //    public MyPolygon findAllVisiblePolygons(){
 //        for(MyPolygon poly : this.polygons){
 //            poly.resetLineColor();
