@@ -5,7 +5,7 @@ import java.awt.Point;
 
 public class PointConverter {
 
-    private static double scale = 1;
+    private static double scale = 0.666;
     private static double scaleStep = 1.1;
 
     public static Point convertPoint(MyPoint point3D){

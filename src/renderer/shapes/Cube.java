@@ -29,9 +29,13 @@ public class Cube{
                 new MyPolygon(p4, p3, p7, p8));
     }
 
-    public boolean click(Color color, MouseEvent e){
-        MyPolygon targetFace = tetra.findPoly(e.getX(), e.getY());
+    public boolean click(Color color, MouseEvent e, MyPolygon[] edges, MyPolygon[] corners, MyPolygon[] centers){
+        MyPolygon targetFace = tetra.findPoly(e.getX(), e.getY(), edges, corners);
         if(targetFace != null){
+            // check if we are altering a center
+            for(MyPolygon poly : centers)
+                if(poly.getId()==targetFace.getId()) return false;
+            // else continue with color change
             targetFace.setColor(color);
             System.out.println("ID:\t"+targetFace.getId());
 //            System.out.println("Color changed!");
@@ -46,6 +50,10 @@ public class Cube{
 
     public void render(Graphics g, HashSet<String> blacklisted){
         this.tetra.render(g, blacklisted);
+    }
+
+    public void render(Graphics g, MyPolygon[]... polys){
+        this.tetra.render(g, polys);
     }
 
     public void updateEdges(){
@@ -77,6 +85,10 @@ public class Cube{
 //    public int[][] getLocs(){
 //        return this.tetra.getLocs();
 //    }
+
+    public Tetrahedron getTetra(){
+        return tetra;
+    }
 
     public void sortFaces(){
         this.tetra.sortPolygons();

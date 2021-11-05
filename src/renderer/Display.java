@@ -13,15 +13,45 @@ import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.io.IOException;
 
+// goals:
+// color palette
+// click detection (check if break occurs on a non-visible polygon)
+// correct for un-desired rotation
+// fix displayState method to update correctly
+// design Pochmann algorithm
+// display Pochmann solution
+// simplify solution
+// optimize algorithm
+
+
+
 public class Display extends Canvas implements Runnable, MouseListener, MouseMotionListener, MouseWheelListener{
     private Thread thread;
     private JFrame frame;
-    private final int frameRate = 1000; //fps
+    private final int frameRate = 100; //fps
     private static final String title = "Rubik's Cube Pochmann Method";
     private static boolean running = false;
     public static int WIDTH = 1600;
     public static int HEIGHT = 1200;
     public static int edgePad = (int) (Math.min(WIDTH, HEIGHT)*0.02);
+
+    //    W #FFFFFF
+//    public static final Color[] colors = new Color[]{Color.WHITE, new Color(255, 156,0),
+//            new Color(0, 255, 155),
+//            new Color(255, 0, 100),
+//            new Color(28, 0, 255),
+//            new Color(227, 255, 0)};
+//    O #FF9C00
+//    G #00FF9B
+//    R #FF0064
+//    B #1C00FF
+//    Y #E3FF00
+
+    public static final Color[] colors = new Color[]{Color.WHITE, new Color(243, 114, 44),
+            new Color(144, 190, 109),
+            new Color(249, 65, 68),
+            new Color(39, 125, 161),
+            new Color(249, 199, 79)};
 
     public static final Color background = new Color(30, 30, 30); // screen background color
     public static final Color text = new Color(170, 170, 170); // screen background color
@@ -115,6 +145,8 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
         }
 
         Graphics g = bs.getDrawGraphics();
+        Font font = new Font("Tahoma", Font.PLAIN, 18);
+        g.setFont(font);
         g.setColor(Color.BLACK);
         g.fillRect(0,0,WIDTH, HEIGHT);
 
@@ -135,6 +167,7 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
     @Override
     public void mouseDragged(MouseEvent e) {
         double rotationFactor = 40;// magnifies rotation
+        // if drag is withing drag zone (sphere) and orbit tool is selected, apply rotation
         if(sphere.contains(e) && BA.orbiting()) {
             Point current = new Point(e.getX() - Display.WIDTH / 2, e.getY() - Display.HEIGHT / 2);
             if (old != null) {
@@ -149,8 +182,13 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        // resets color from middle mouse click
+//        if(e.getButton() == 2) RCube.reset();
+        if(e.getButton() == 2) RCube.toggleRainbow();
+        // detects if action on cube
         if(sphere.contains(e)) System.out.println("INSIDE SPHERE");
-        if(old==null) {
+        // checks if a color has been selected and applies it to the target face
+        if(old==null && e.getButton()==1) {
             Color selectedColor = BA.contains(e);
             if (selectedColor != null) {
                 System.out.println("Color Selected");

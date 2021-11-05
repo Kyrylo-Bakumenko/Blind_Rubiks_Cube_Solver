@@ -1,5 +1,6 @@
 package renderer.shapes;
 
+import renderer.Display;
 import renderer.point.MyPoint;
 import renderer.point.PointConverter;
 
@@ -12,6 +13,10 @@ public class MyPolygon {
     private Line[] lines;
     private String loc; // x,y,z coordinates to identify overlaps
     private int id;
+    
+    // bounding rectangle
+//    int xmax, xmin, ymax, ymin;
+    
 //    private int nvert;
 
     public MyPolygon(Color color, MyPoint... points){
@@ -33,6 +38,8 @@ public class MyPolygon {
         Point p2 = PointConverter.convertPoint(this.points[0]);
         this.lines[points.length-1] = new Line(p1, p2);
 
+//        initBoundingRectangle(points);
+        
         this.loc = setLoc();
     }
 
@@ -55,6 +62,8 @@ public class MyPolygon {
         Point p2 = PointConverter.convertPoint(this.points[0]);
         this.lines[points.length-1] = new Line(p1, p2);
 
+//        initBoundingRectangle(points);
+        
         this.loc = setLoc();
     }
 
@@ -77,7 +86,7 @@ public class MyPolygon {
 
         for(Line line :this.lines) {
             g.setColor(line.color);
-            int thickness = Math.max((int) (8 * PointConverter.getScale()), 2);
+            int thickness = Math.max((int) (6 * PointConverter.getScale()), 2);
             for(int i=-thickness/2; i<thickness/2; i++){
                 g.drawLine((int)line.x1+i, (int)line.y1, (int)line.x2+i, (int)line.y2);
             }
@@ -106,6 +115,7 @@ public class MyPolygon {
     }
 
     public boolean contains(int testx, int testy){
+        if(!bounded(testx, testy)) return false;
         int intersections = 0;
         for(Line line : this.lines)
             if(line.intersects(testx, testy)) intersections++;
@@ -151,7 +161,7 @@ public class MyPolygon {
     }
 
     public String getLoc(){
-        return loc.toString();
+        return loc;
     }
 
     public boolean equals(MyPolygon other){
@@ -162,7 +172,47 @@ public class MyPolygon {
         this.color = color;
     }
 
+    public char getColor(){
+        if(this.color.equals(Display.colors[0])) return 'W';
+        else if(this.color.equals(Display.colors[1])) return 'O';
+        else if(this.color.equals(Display.colors[2])) return 'G';
+        else if(this.color.equals(Display.colors[3])) return 'R';
+        else if(this.color.equals(Display.colors[4])) return 'B';
+        else return 'Y';
+    }
+
     public void resetLineColor(){
         for(Line line : lines) line.resetColor();
+    }
+    
+//    public void initBoundingRectangle(MyPoint... points){
+//        this.xmax = Integer.MIN_VALUE;
+//        this.xmin = Integer.MAX_VALUE;
+//        this.ymax = Integer.MIN_VALUE;
+//        this.ymin = Integer.MAX_VALUE;
+//        for(MyPoint point : points){
+//            Point p = PointConverter.convertPoint(point);
+//            this.xmax = Math.max(xmax, (int)p.getX());
+//            this.xmin = Math.min(xmin, (int)p.getX());
+//            this.ymax = Math.max(ymax, (int)p.getY());
+//            this.ymin = Math.min(ymin, (int)p.getY());
+//        }
+//    }
+    
+    public boolean bounded(int testx, int testy){
+
+        int xmax = Integer.MIN_VALUE;
+        int xmin = Integer.MAX_VALUE;
+        int ymax = Integer.MIN_VALUE;
+        int ymin = Integer.MAX_VALUE;
+        for(MyPoint point : this.points){
+            Point p = PointConverter.convertPoint(point);
+            xmax = Math.max(xmax, (int)p.getX());
+            xmin = Math.min(xmin, (int)p.getX());
+            ymax = Math.max(ymax, (int)p.getY());
+            ymin = Math.min(ymin, (int)p.getY());
+        }
+
+        return testx > xmin && testx < xmax && testy > ymin && testy < ymax;
     }
 }

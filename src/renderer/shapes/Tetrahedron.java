@@ -34,6 +34,19 @@ public class Tetrahedron {
         }
     }
 
+    public void render(Graphics g, MyPolygon[]... polys) {
+        for(int i=3; i<6; i++){
+            MyPolygon poly = this.polygons[i];
+            for(MyPolygon[] faces : polys) {
+                for (MyPolygon face : faces) {
+                    if (face.getId() == poly.getId()) {
+                        poly.render(g);
+                    }
+                }
+            }
+        }
+    }
+
     public void updateEdges(){
         for(MyPolygon poly : this.polygons){
             poly.updateLines();
@@ -85,6 +98,23 @@ public class Tetrahedron {
         return null;
     }
 
+    public MyPolygon findPoly(int y, int z, MyPolygon[] edges, MyPolygon[] corners){
+        for(MyPolygon poly : this.polygons) {
+            poly.resetLineColor();
+        }
+
+        for(int i=this.polygons.length-1; i >= this.polygons.length-3; i--){
+            if (this.polygons[i].contains(y, z)){
+                for(int j=0; j<edges.length; j++){
+                    if(this.polygons[i].getId() == edges[j].getId() || this.polygons[i].getId() == corners[j].getId()) {
+                        return this.polygons[i];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public int assignIds(int id){
         for(MyPolygon poly : polygons){
             poly.setId(id++);
@@ -106,6 +136,10 @@ public class Tetrahedron {
         for(MyPolygon poly : this.polygons){
             map.put(poly.getLoc(), map.getOrDefault(poly.getLoc(), 0)+1);
         }
+    }
+
+    public MyPolygon[] getPolygons(){
+        return polygons;
     }
 
 //    public int[][] getLocs(){
