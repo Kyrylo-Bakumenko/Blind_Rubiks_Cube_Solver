@@ -13,15 +13,15 @@ import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.io.IOException;
 
-// goals:
-// color palette
-// click detection (check if break occurs on a non-visible polygon)
-// correct for un-desired rotation
-// fix displayState method to update correctly
-// design Pochmann algorithm
-// display Pochmann solution
-// simplify solution
-// optimize algorithm
+// Goals:
+    // design Pochmann algorithm
+        // remember to add corner validation
+    // display Pochmann solution
+    // simplify solution
+    // optimize algorithm
+    // correct for un-desired rotation
+    // color palette
+    // label mode to display lettering system
 
 
 
@@ -46,6 +46,8 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
 //    R #FF0064
 //    B #1C00FF
 //    Y #E3FF00
+
+    double globalYaw = 0;
 
     public static final Color[] colors = new Color[]{Color.WHITE, new Color(243, 114, 44),
             new Color(144, 190, 109),
@@ -133,7 +135,7 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
         int size = 600;
         this.BA = new ButtonArray(Display.edgePad, Display.edgePad, 100, new File("imgs/orbit.png"));
         this.RCube = new RubiksCube(size, 0, 0, 0);
-        this.RCube.rotate(false, 0, 35, 35);
+        this.RCube.rotate(false, 0, 0, 0);
         this.sphere = new RotationSphere( size );
     }
 
@@ -150,31 +152,40 @@ public class Display extends Canvas implements Runnable, MouseListener, MouseMot
         g.setColor(Color.BLACK);
         g.fillRect(0,0,WIDTH, HEIGHT);
 
+//        RCube.rotate(globalYaw > 0, 0, 0, Math.abs(globalYaw));
+
 //        tetra.render(g);
         sphere.render(g);
         RCube.render(g);
         BA.render(g);
 
+//        RCube.rotate(globalYaw < 0, 0, 0, Math.abs(globalYaw));
         g.dispose();
         bs.show();
     }
     private void update(){
 //        this.tetra.rotate(true, 30.0/(frameRate), 30.0/(frameRate), 0);
-//        this.RCube.rotate(true, 20.0/frameRate, 20.0/frameRate, 0);
+//        this.RCube.rotate(true, 0, 0, 20.0/frameRate);
+//        this.RCube.rotate(true, 0, 20.0/frameRate, 0);
     }
 
     Point old = null;
     @Override
     public void mouseDragged(MouseEvent e) {
-        double rotationFactor = 40;// magnifies rotation
+        double rotationFactor = 40.0;// magnifies rotation
         // if drag is withing drag zone (sphere) and orbit tool is selected, apply rotation
         if(sphere.contains(e) && BA.orbiting()) {
             Point current = new Point(e.getX() - Display.WIDTH / 2, e.getY() - Display.HEIGHT / 2);
             if (old != null) {
                 double[] rot = sphere.getRotation(old, current);
 
-                RCube.rotate(rot[0] > 0, 0, Math.abs(rot[0])*rotationFactor, 0);
-                RCube.rotate(rot[1] > 0, 0, 0, Math.abs(rot[1])*rotationFactor);
+                RCube.rotate(rot[0] > 0, 0, Math.abs(rot[0]) * rotationFactor, 0);
+//                // use global yaw
+//                globalYaw += rot[1] * rotationFactor;
+//                globalYaw = globalYaw%360;
+//                System.out.println(globalYaw +", " + rot[1]);
+                RCube.rotate(rot[1] > 0, 0, 0, Math.abs(rot[1]) * rotationFactor);
+
             }
             old = current;
         }

@@ -9,15 +9,19 @@ import java.io.File;
 public class ButtonArray {
     ColorButton[] buttons;
     OrbitButton orbitButton;
+//    Button pochmannButton;
+//    int pButtonWidth = 160;
+//    int pButtonHeight = 40;
+
     public ButtonArray(){
         int size = 100;
         this.buttons = new ColorButton[]{
                 new ColorButton(Display.edgePad, Display.edgePad, size, size, Color.RED),
-                new ColorButton(Display.edgePad+(int)(size*1.1), Display.edgePad+(int)(size*1.1), size, size, Color.BLUE),
-                new ColorButton(Display.edgePad+2*(int)(size*1.1), Display.edgePad+2*(int)(size*1.1), size, size, Color.WHITE),
-                new ColorButton(Display.edgePad+3*(int)(size*1.1), Display.edgePad+3*(int)(size*1.1), size, size, Color.GREEN),
-                new ColorButton(Display.edgePad+4*(int)(size*1.1), Display.edgePad+4*(int)(size*1.1), size, size, Color.ORANGE),
-                new ColorButton(Display.edgePad+5*(int)(size*1.1), Display.edgePad+5*(int)(size*1.1), size, size, Color.YELLOW)};
+                new ColorButton(Display.edgePad, Display.edgePad+(int)(size*1.1), size, size, Color.BLUE),
+                new ColorButton(Display.edgePad, Display.edgePad+2*(int)(size*1.1), size, size, Color.WHITE),
+                new ColorButton(Display.edgePad, Display.edgePad+3*(int)(size*1.1), size, size, Color.GREEN),
+                new ColorButton(Display.edgePad, Display.edgePad+4*(int)(size*1.1), size, size, Color.ORANGE),
+                new ColorButton(Display.edgePad, Display.edgePad+5*(int)(size*1.1), size, size, Color.YELLOW)};
     }
     public ButtonArray(int x, int y, int size){
         this.buttons = new ColorButton[Display.colors.length];
@@ -61,4 +65,16 @@ public class ButtonArray {
         }
         return null;
     }
+
+//    public void initPochmannButton(){
+//        this.pochmannButton = new Button((Display.WIDTH-pButtonWidth)/2, Display.edgePad, pButtonWidth, pButtonHeight);
+//    }
+//    public void drawPochmannButton(Graphics g){
+//        Color temp = g.getColor();
+//        g.setColor(Display.background);
+//        g.fillRoundRect((Display.WIDTH-pButtonWidth)/2, Display.edgePad, pButtonWidth, pButtonHeight, 30, 30);
+//        g.setColor(Color.GRAY);
+//        g.drawRoundRect((Display.WIDTH-pButtonWidth)/2, Display.edgePad, pButtonWidth, pButtonHeight, 30, 30);
+//        g.setColor(temp);
+//    }
 }
