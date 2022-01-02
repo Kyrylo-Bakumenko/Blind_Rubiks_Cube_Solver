@@ -39,3 +39,10 @@ The user may manipulate the cube by first selecting the "Orbit" button by *left 
 #### Hidden Mode
 By pressing the *middle mouse button* the cube will enable the 'Hidden Mode'. This mode clears all colors and phases through different color, giving the user something to focus on to solve the cube 'blindly' without a physical blindfold.
 The Hidden Mode can be enabled or disabled by pressing the *middle mouse button* again.
+
+## In The Works
+Currently I am finishing the Pochmann algorithm. I plan to continue work on a Computer Vision implementation to allow the sides of the cube to be scanned in for increased ease of use.
+
+Sample Cube: ![image](ComputerVision/imgs/Cube_Image.png)
+Edge Map from Canny Algorithm: ![image](ComputerVision/imgs/Edge_Map.png)
+Hough Transform: ![image](ComputerVision/imgs/Hough_Transform.png)
