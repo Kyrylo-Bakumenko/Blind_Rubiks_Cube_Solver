@@ -43,8 +43,14 @@ The Hidden Mode can be enabled or disabled by pressing the *middle mouse button*
 ## In The Works
 Currently I am finishing the Pochmann algorithm. I plan to continue work on a Computer Vision implementation to allow the sides of the cube to be scanned in for increased ease of use.
 
-Sample Cube: ![image](ComputerVision/imgs/Cube_Image.png)
+Sample Cube:
 
-Edge Map from Canny Algorithm: ![image](ComputerVision/imgs/Canny_Edge_Map.png)
+![image](ComputerVision/imgs/Cube_Image.png)
 
-Hough Transform: ![image](ComputerVision/imgs/Hough_Transform.png)
+Edge Map from Canny Algorithm:
+
+![image](ComputerVision/imgs/Canny_Edge_Map.png)
+
+Hough Transform:
+
+![image](ComputerVision/imgs/Hough_Transform.png)
